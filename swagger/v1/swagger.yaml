@@ -15,6 +15,7 @@ paths:
         in: query
         description: Access Token generated from login. Both users and moderators
           can create bounty
+        required: true
         schema:
           type: string
       responses:
@@ -98,6 +99,7 @@ paths:
       - name: access_token
         in: query
         description: Moderator Access Token
+        required: true
         schema:
           type: string
       responses:
@@ -140,6 +142,7 @@ paths:
       - name: access_token
         in: query
         description: Moderator Access Token
+        required: true
         schema:
           type: string
       responses:
@@ -176,6 +179,7 @@ paths:
       - name: access_token
         in: query
         description: Moderator Access Token
+        required: true
         schema:
           type: string
       responses:

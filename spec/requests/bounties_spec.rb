@@ -7,7 +7,7 @@ RSpec.describe 'Bounties API', type: :request do
       description 'Creates a Bounty'
       consumes 'application/json'
       produces 'application/json'
-      parameter name: :access_token, in: :query, type: :string, description: 'Access Token generated from login. Both users and moderators can create bounty'
+      parameter name: :access_token, in: :query, type: :string, description: 'Access Token generated from login. Both users and moderators can create bounty', required: true
       parameter name: :bounty, in: :body, schema: {
         type: :object,
         properties: {
@@ -93,7 +93,7 @@ RSpec.describe 'Bounties API', type: :request do
       description 'Reject a bounty'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer, description: 'ID of bounty'
-      parameter name: :access_token, in: :query, type: :string, description: 'Moderator Access Token'
+      parameter name: :access_token, in: :query, type: :string, description: 'Moderator Access Token', required: true
 
       response '200', 'Successfully Rejected' do
         schema type: :object,
@@ -113,6 +113,11 @@ RSpec.describe 'Bounties API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized request' do
+        let!(:id) { create(:bounty).id }
+        let!(:access_token) { user_access_token }
+      end
     end
   end
 
@@ -122,7 +127,7 @@ RSpec.describe 'Bounties API', type: :request do
       description 'Approve a bounty'
       produces 'application/json'
       parameter name: :id, in: :path, type: :id, description: 'ID of bounty'
-      parameter name: :access_token, in: :query, type: :string, description: 'Moderator Access Token'
+      parameter name: :access_token, in: :query, type: :string, description: 'Moderator Access Token', required: true
 
       response '200', 'Successfully Approved' do
         schema type: :object,
@@ -141,6 +146,11 @@ RSpec.describe 'Bounties API', type: :request do
         let!(:access_token) { moderator_access_token }
         run_test!
       end
+
+      response '401', 'Unauthorized request' do
+        let!(:id) { create(:bounty).id }
+        let!(:access_token) { user_access_token }
+      end
     end
   end
 
@@ -149,7 +159,7 @@ RSpec.describe 'Bounties API', type: :request do
       tags 'Bounties'
       description 'Get all pending bounties'
       produces 'application/json'
-      parameter name: :access_token, in: :query, type: :string, description: 'Moderator Access Token'
+      parameter name: :access_token, in: :query, type: :string, description: 'Moderator Access Token', required: true
 
       response '200', 'Returns an array of pending bounties' do
         schema type: :array,
@@ -188,6 +198,11 @@ RSpec.describe 'Bounties API', type: :request do
             expect(bounty["status"]).to eq('pending')
           end
         end
+      end
+
+      response '401', 'Unauthorized request' do
+        let!(:id) { create(:bounty).id }
+        let!(:access_token) { user_access_token }
       end
     end
   end
