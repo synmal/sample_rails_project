@@ -174,6 +174,33 @@ paths:
         '200':
           description: Returns an array of pending bounties object
           content: {}
+  "/oauth/access_token":
+    post:
+      summary: Obtain Access Token
+      tags:
+      - Access Token
+      description: Obtain Access Token
+      parameters: []
+      responses:
+        '200':
+          description: Returns access token object
+          content: {}
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - grant_type
+              - email
+              - password
 servers:
 - url: https://{defaultHost}
   variables:
