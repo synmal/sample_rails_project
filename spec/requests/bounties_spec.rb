@@ -26,7 +26,7 @@ RSpec.describe 'Bounties API', type: :request do
 
       response '201', 'Bounty successfully created' do
         let(:bounty) { {bounty: { title: 'Title', description: 'Description', company_name: 'Company Name' }} }
-        run_test!
+
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe 'Bounties API', type: :request do
 
       response '200', 'Returns an array of approved bounties' do
         before { FactoryBot.create_list(:approved_bounty, 2) }
-        run_test!
+
       end
     end
   end
@@ -66,7 +66,7 @@ RSpec.describe 'Bounties API', type: :request do
           required: %w( id title description status user_id company_name created_at updated_at )
 
         let(:id) { Bounty.create(title: 'Title', description: 'description', company_name: 'Company Name', status: 'rejected').id }
-        run_test!
+
       end
     end
   end
@@ -94,7 +94,7 @@ RSpec.describe 'Bounties API', type: :request do
           required: %w( id title description status user_id company_name created_at updated_at )
 
         let(:id) { Bounty.create(title: 'Title', description: 'description', company_name: 'Company Name', status: 'approved').id }
-        run_test!
+
       end
     end
   end
@@ -107,7 +107,7 @@ RSpec.describe 'Bounties API', type: :request do
       parameter name: :access_token, in: :path, type: :string, description: 'Moderator Access Token'
 
       response '200', 'Returns an array of pending bounties object' do
-        run_test!
+
       end
     end
   end

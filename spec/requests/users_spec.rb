@@ -20,7 +20,7 @@ RSpec.describe '/users', type: :request do
       response '200', 'Returns access token object' do
         let(:user){ build(:user) }
 
-        run_test!
+
       end
     end
   end
