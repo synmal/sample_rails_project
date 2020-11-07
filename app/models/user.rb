@@ -5,7 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   def self.authenticate(email, password)
-    byebug
      user = self.find_for_authentication(email: email)
      user.try(:valid_password?, password) ? user : nil
   end
