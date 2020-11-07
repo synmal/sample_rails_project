@@ -12,13 +12,20 @@ paths:
       description: Creates a Bounty
       parameters:
       - name: access_token
-        in: path
+        in: query
         description: Access Token generated from login. Both users and moderators
           can create bounty
-        required: true
+        schema:
+          type: string
       responses:
         '201':
           description: Bounty successfully created
+          content: {}
+        '401':
+          description: Unauthorized request
+          content: {}
+        '400':
+          description: Bad request
           content: {}
       requestBody:
         content:
@@ -52,7 +59,29 @@ paths:
       responses:
         '200':
           description: Returns an array of approved bounties
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    company_name:
+                      type: string
+                    user_id:
+                      type: integer
+                    status:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
   "/bounties/{id}/reject":
     post:
       summary: Reject a bounty
@@ -65,11 +94,10 @@ paths:
         description: ID of bounty
         required: true
         schema:
-          type: string
+          type: integer
       - name: access_token
-        in: path
+        in: query
         description: Moderator Access Token
-        required: true
         schema:
           type: string
       responses:
@@ -96,15 +124,6 @@ paths:
                     type: string
                   updated_at:
                     type: string
-                required:
-                - id
-                - title
-                - description
-                - status
-                - user_id
-                - company_name
-                - created_at
-                - updated_at
   "/bounties/{id}/approve":
     post:
       summary: Approve a bounty
@@ -117,11 +136,10 @@ paths:
         description: ID of bounty
         required: true
         schema:
-          type: string
+          type: id
       - name: access_token
-        in: path
+        in: query
         description: Moderator Access Token
-        required: true
         schema:
           type: string
       responses:
@@ -148,15 +166,6 @@ paths:
                     type: string
                   updated_at:
                     type: string
-                required:
-                - id
-                - title
-                - description
-                - status
-                - user_id
-                - company_name
-                - created_at
-                - updated_at
   "/bounties/pending_action":
     get:
       summary: Get all pending bounties
@@ -165,16 +174,37 @@ paths:
       description: Get all pending bounties
       parameters:
       - name: access_token
-        in: path
+        in: query
         description: Moderator Access Token
-        required: true
         schema:
           type: string
       responses:
         '200':
-          description: Returns an array of pending bounties object
-          content: {}
-  "/oauth/access_token":
+          description: Returns an array of pending bounties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    company_name:
+                      type: string
+                    user_id:
+                      type: integer
+                    status:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+  "/oauth/token":
     post:
       summary: Obtain Access Token
       tags:
@@ -185,9 +215,12 @@ paths:
         '200':
           description: Returns access token object
           content: {}
+        '400':
+          description: Returns unauthorized
+          content: {}
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:

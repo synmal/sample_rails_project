@@ -18,7 +18,7 @@ class BountiesController < ApplicationController
     if bounty.save
       respond_with bounty, status: :created
     else
-      respond_with bounty.errors
+      render json: bounty.errors.messages, status: :bad_request
     end
   end
 
