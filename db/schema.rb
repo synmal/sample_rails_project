@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_11_05_092203) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.integer "resource_owner_id"
     t.integer "application_id"
