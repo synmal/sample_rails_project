@@ -24,4 +24,6 @@ RSpec.describe User, type: :model do
     user.save
     expect(User.authenticate(user.email, user.password)).to be_instance_of User
   end
+
+  it { should have_many(:bounties) }
 end

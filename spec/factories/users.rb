@@ -2,11 +2,11 @@ FactoryBot.define do
   factory :user do
     email { Faker::Internet.email }
     password { 'password' }
-  end
 
-  factory :moderator do
-    email { Faker::Internet.email }
-    password { 'password' }
-    moderator { true }
+    trait :moderator do
+      moderator { true }
+    end
+
+    factory :moderator, traits: [:moderator]
   end
 end
