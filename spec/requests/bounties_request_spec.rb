@@ -95,4 +95,10 @@ RSpec.describe "Bounties", type: :request do
       expect(bounty["status"]).to eq('pending')
     end
   end
+
+  it 'will show unauthorized if non moderator visit pending_actions' do
+    get "/bounties/pending_action?access_token=#{user_access_token}", headers: @headers
+
+    expect(response).to have_http_status(:unauthorized)
+  end
 end
