@@ -48,3 +48,5 @@ gem "devise", "~> 4.7"
 gem "doorkeeper", "~> 5.4"
 
 gem "pg", "~> 1.2"
+
+gem "rswag", "~> 2.3"
