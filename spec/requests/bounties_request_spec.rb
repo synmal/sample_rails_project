@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Bounties", type: :request do
   before :each do
-    @headers = {'Accept': 'application/json'}
+    @headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
     @bounty_params = { bounty: attributes_for(:bounty) }
   end
 
@@ -23,7 +23,7 @@ RSpec.describe "Bounties", type: :request do
     post "/bounties/#{bounty.id}/reject?access_token=#{moderator_access_token}", headers: @headers
 
     expect(response).to have_http_status(:ok)
-    expect(bounty.rejected?).to be true
+    expect(bounty.reload.rejected?).to be true
   end
 
   it 'should able to approve' do
@@ -31,7 +31,7 @@ RSpec.describe "Bounties", type: :request do
     post "/bounties/#{bounty.id}/approve?access_token=#{moderator_access_token}", headers: @headers
 
     expect(response).to have_http_status(:ok)
-    expect(bounty.approved?).to be true
+    expect(bounty.reload.approved?).to be true
   end
 
   it 'should not able to reject if not moderator' do
@@ -57,16 +57,42 @@ RSpec.describe "Bounties", type: :request do
 
     expect(response).to have_http_status(:ok)
 
-    JSON.parse(response.body).each do
-      expect(response[:status]).to eq('approved')
+    JSON.parse(response.body).each do |bounty|
+      expect(bounty["status"]).to eq('approved')
     end
   end
 
-  pending 'should able to filter by company name' do
+  it 'should able to filter by company name' do
+    company_name = Faker::Company.name
 
+    3.times do
+      create(:approved_bounty, company_name: company_name)
+    end
+
+    5.times do
+      create(:approved_bounty)
+    end
+
+    get "/bounties?company_name=#{company_name}", headers: @headers
+
+    expect(response).to have_http_status(:ok)
+
+    JSON.parse(response.body).each do |bounty|
+      expect(bounty["company_name"]).to eq(company_name)
+    end
   end
 
-  pending 'show pending bounties to moderator' do
+  it 'show pending bounties to moderator' do
+    create(:bounty)
+    create(:rejected_bounty)
+    create(:approved_bounty)
 
+    get "/bounties/pending_action?access_token=#{moderator_access_token}", headers: @headers
+
+    expect(response).to have_http_status(:ok)
+
+    JSON.parse(response.body).each do |bounty|
+      expect(bounty["status"]).to eq('pending')
+    end
   end
 end

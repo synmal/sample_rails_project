@@ -5,11 +5,13 @@ Rails.application.routes.draw do
   end
   devise_for :users
 
-  resources :bounties do
+  resources :bounties, except: [:update, :destroy] do
     member do
       post :approve
       post :reject
     end
+
+    get '/pending_action', on: :collection, to: 'bounties#pending_action'
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
